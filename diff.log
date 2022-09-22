@@ -1,0 +1,35 @@
+commit 3299fd99458c94645bfe63011f6b7ceda780b8e1
+Author: 김준현 <chris1108@dreamsecurity.com>
+Date:   Thu Jun 30 15:00:59 2022 +0900
+
+    20220630 개인정보처리방침 개정
+
+M	origin.txt
+M	aa/aa2/bb.txt
+
+M	notFoundFile.aa
+D	deleted.txt
+D	deleted2.txt
+D	deleted3.txt
+D	deleted4.txt
+D	deleted5.txt
+D	aa/deleted5.txt
+D	aa/deleted6.txt
+D	aa/bb/deleted8.txt
+D	cc/deleted8.txt
+
+
+
+
+cp aaa.txt	deleted.txt
+cp aaa.txt	deleted2.txt
+cp aaa.txt	deleted3.txt
+cp aaa.txt	deleted4.txt
+cp aaa.txt	deleted5.txt
+cp aaa.txt	aa/deleted5.txt
+cp aaa.txt	aa/deleted6.txt
+cp aaa.txt	aa/bb/deleted8.txt
+cp aaa.txt	cc/deleted8.txt
+
+
+rm deleted5.txt deleted.txt aa/deleted5.txt cc/deleted8.txt aa/deleted6.txt aa/bb/deleted8.txt deleted4.txt deleted3.txt deleted2.txt 
