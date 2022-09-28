@@ -10,5 +10,5 @@ public interface Tree <T>{
 	
 	public Node<T> getRootNode();
 	public void setRootNode(Node<T> rootNode);
-
+	public void deleteNode(T data);
 }

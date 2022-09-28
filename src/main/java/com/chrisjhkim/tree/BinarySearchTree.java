@@ -45,22 +45,83 @@ public class BinarySearchTree <T extends Comparable<? super T>> extends BinaryTr
 	
 	
 	public boolean contains(T data) {
-		return contains(this.getRootNode(), data);
+		return findNode(this.getRootNode(), data) != null;
 	}
 
-	private boolean contains(BinaryNode<T> currentNode, T data) {
-		if ( currentNode == null ) {
-			return false;
-		}else if( currentNode.getData().equals(data)) {
-			return true;
+	@Override
+	public void deleteNode(T data) {
+		if ( data == null || super.getRootNode() == null) return;
+		else if ( super.getRootNode().getData().equals(data)) {
+			super.setRootNode(null);
+		}else {
+			BinaryNode<T> parentNode = findParentNodeOf(data, super.getRootNode());
+			if ( parentNode == null ) {
+				return;
+			}else {
+				
+				BinaryNode<T> targetNode = null;
+				if ( parentNode.getRightNode().getData().equals(data)) {
+					targetNode = parentNode.getRightNode();
+				}else {
+					targetNode = parentNode.getLeftNode();
+				}
+				
+				if ( targetNode.getLeftNode() == null && targetNode.getRightNode() == null ){
+					targetNode = null;
+				}else {
+					
+				}
+			}
+			
+			
+			
+			
+			
+			
+			
+		}
+		
+	}
+
+	private BinaryNode<T> findNode(BinaryNode<T> currentNode,  T data) {
+		if ( data == null ) {
+			return null;
+		}else if ( currentNode.getData().equals(data)) {
+			return currentNode;
 		}else if ( data.compareTo(currentNode.getData()) < 0 ) {
-			return contains(currentNode.getLeftNode(), data);
+			return findNode(currentNode.getLeftNode(), data);
 		}else if ( currentNode.getData().compareTo(data) < 0 ) {
-			return contains(currentNode.getRightNode(), data);
+			return findNode(currentNode.getRightNode(), data);
 		}else {
 			throw new IllegalArgumentException("invalid state");
 		}
 	}
-
+	private BinaryNode<T> findParentNodeOf(T data, BinaryNode<T> currentNode) {
+		if ( currentNode == null ) return null;
+		else if ( currentNode.getData().equals(data)) throw new IllegalArgumentException(" data is at root node. no parent exists");
+		else if ( data.compareTo(currentNode.getData()) < 0 ) {
+			// 왼쪽 확인
+			if ( currentNode.getLeftNode() == null ) {
+				return null;
+			}else if ( currentNode.getLeftNode().getData().equals(data)) {
+				return currentNode;
+			}else {
+				return findParentNodeOf(data, currentNode.getLeftNode());
+			}
+		}else if (currentNode.getData().compareTo(data) < 0 ) {
+			// 오른쪽 확인
+			if ( currentNode.getRightNode() == null ) {
+				return null;
+			}else if ( currentNode.getRightNode().getData().equals(data)) {
+				return currentNode;
+			}else {
+				return findParentNodeOf(data, currentNode.getRightNode());
+			}
+		}else {
+			throw new IllegalArgumentException("invalid state");
+		}
+		
+		
+	}
 
 }
