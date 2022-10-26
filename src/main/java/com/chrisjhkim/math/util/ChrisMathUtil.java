@@ -1,5 +1,14 @@
 package com.chrisjhkim.math.util;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * The class {@code ChrisMathUtil} contains methods for performing 
  * numeric operations that {@link Math} class doesn't provides
@@ -47,6 +56,56 @@ public final class ChrisMathUtil {
 		
 	}
 	
+	public static String numberMultiply(String input1, String input2) {
+		if ( input1.equals("1") ) return input2;
+		if ( input2.equals("1") ) return input1;
+		if ( input1.equals("0") || input2.equals("0") ) return "0";
+		
+		
+		int maxAnswerLength = input1.length() + input2.length();
+		
+		final char[] arr1 = input1.toCharArray();
+		final char[] arr2 = input2.toCharArray();
+		System.out.println(Arrays.toString(arr1));
+		System.out.println("X");
+		System.out.println(Arrays.toString(arr2));
+		char[][] note = new char[input2.length()][maxAnswerLength];
+		System.err.println(Arrays.deepToString(note));
+		int u,d;
+		for ( int i = arr2.length-1 ; i >= 0 ; i -- ) {
+			//de
+			int up = 0;
+			for ( int j = arr1.length-1 ; j >= 0 ; j -- ) {
+				// abc
+				u = (arr1[j]-48);
+				d = (arr2[i]-48);
+				note[i][j] = (char) (((u*d)+up)%10);
+				up = ((u*d)+up)/10;
+				
+				System.out.println(j+ " " + i + " " +  (arr1[j]-48) + "x" +  (arr2[i]-48) +"="+ up + " " + (int)(note[i][j]));
+				
+			}
+		}
+		
+		System.err.println(Arrays.deepToString(note));
+		
+		return null;
+	}
+/**
+   abc
+  X de
+  ----
+ EFGH
+  ABCD 
+ 
+  
+ * 
+ * 	
+ */
+	
+	
+	
+	
 	
 	/**
 	 * validate if the number is prime or not
@@ -62,5 +121,103 @@ public final class ChrisMathUtil {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * num 을 소인수분해해서 소수들의 곱으로 표현합
+	 * @param num
+	 * @throws IOException
+	 */
+	public static String getFactorizationInPrimeFactors(int num) throws IOException {
+		int input = num;
+		System.out.println("input="+num);
+		
+		List<Integer> bases = new ArrayList<>();
+		List<Integer> factors = new ArrayList<>();
+		
+		int testNum = num;
+		int denominator = 2;
+		while ( testNum >= denominator ) {
+			boolean isFactor = false;
+			int factorCount = 0;
+			while ( testNum %denominator == 0) {
+				isFactor = true;
+				factorCount++;
+				testNum /= denominator;
+			}
+			if ( isFactor ) {
+				bases.add(denominator);
+				factors.add(factorCount);
+			}
+			denominator++;
+		}
+		
+		System.out.println("bases  = "+ bases);
+		System.out.println("factors = "+ factors);
+		StringBuilder sb = new StringBuilder();
+		for ( int i = 0 ; i < bases.size(); i ++ ) {
+			if ( i != 0 ) {
+				sb.append(" + ");
+			}
+			sb.append(String.valueOf(bases.get(i)));
+			sb.append('^');
+			sb.append(String.valueOf(factors.get(i)));
+		}
+		sb.append(" = ");
+		sb.append(String.valueOf(input));
+		System.out.println(sb.toString());
+		return sb.toString();
+	}
+	
+	/**
+	 * factorialBaseNumber! ( factorialBaseNumber 의 factorial )값 을 소인수 분해 했을때 baseNum의 차수를 구함
+	 * 예를들어 입력값으로 5, 2 가 주어지면
+	 * 5! = 5*4*3*2*1 = 2^3*3*5 이므로 3을 return 한다.
+	 * 
+	 * @param factorialBaseNumber
+	 * @param baseNum
+	 * @return
+	 */
+	public static int getPrimeNumFactorOfFactorial(int factorialBaseNumber, int baseNum) {
+		if ( baseNum == 0 ) {
+			throw new IllegalArgumentException("zero is not prime number");
+		}
+		int counter = 0;
+		while ( factorialBaseNumber >= baseNum ) {
+			counter += factorialBaseNumber/baseNum;
+			factorialBaseNumber /= baseNum;
+		}
+		return counter;
+		
+	}
+	/**
+	 * get GCD(Greatest Common Denominator :최대 공약수)를 구한다.
+	 * @param n
+	 * @param m
+	 * @return
+	 */
+	public static int getGcdOf(int n, int m) {
+		int result =1;
+		int denominator = 2;
+		
+		while ( Math.min(n, m)/denominator >=1) {
+			while ( n%denominator==0 && m%denominator==0) {
+				result *= denominator;
+				n /= denominator;
+				m /= denominator;
+			}
+			denominator ++;
+		}
+
+		return result;
+	}
+	/**
+	 * get LCM(Least Common Multiple : 최소공배수)를 구한다.
+	 * @param n
+	 * @param m
+	 * @return
+	 */
+	public static int getLcmOf(int n, int m) {
+		return n*m/getGcdOf(n, m);
 	}
 }
