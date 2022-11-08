@@ -220,4 +220,70 @@ public final class ChrisMathUtil {
 	public static int getLcmOf(int n, int m) {
 		return n*m/getGcdOf(n, m);
 	}
+	
+
+	/**
+	 * n! / (r!*(n-r)!) 
+	 * 이항계수 nCr 을 구함
+	 * @param n
+	 * @param r
+	 * @return
+	 */
+	public static int binomial(int n, int r) {
+		return binomialUsingDynamicProgramming(n, r);
+	}
+	
+	
+	
+	/**
+	 * 이항계수를 구할때 파스칼의 삼각형을 이용하면 
+	 * binomail(n,r) = binomial(n-1,r-1) + binomial(n-1,r); 이 성립함을 이용한다.
+	 * 
+	 * factorial(n)/(factorial(r)*factorial(n-r)) 을 구하는것과 동일하다
+	 * 
+	 * _(n)C_(r)을 구하는것과 동일하다.
+	 * 
+	 * 예)
+	 * AAAABB 를 나열하는 순서와 상관없이 배열하는 방법으로는 A,B의 총 개수 n=6 , A의 개수 r=4 (혹은 B의 개수 r=2)로
+	 * 6!/(4!*2!) 로 구할 수 있으며 _(6)C_(4) 혹은 _(6)C_(2) 로 표현할 수 있는데 
+	 * 이때 이 함수를 쓰면 된다.
+	 *  
+	 * 이때 n이 어느정도 값 이상되면 int 범위를 바로넘어가기 때문에 long 혹은 BigInteger 로 바꿔서 사용해야 하며
+	 * 보통 문제의 경우 그 값을 10007 등의 소수로 나눠서 나온 나머지를 구하라는 식으로 출제된다. 
+	 * 이런경우에는 페르마의 소정리를 추가로 적용해서 풀어야 한다.
+	 *   
+	 * @param n
+	 * @param r
+	 * @return
+	 */
+	private static int binomialUsingDynamicProgramming(int n, int r) {
+		if ( dpArr == null ) {
+			dpArr = new int[n+1][];
+			for ( int i = 0 ; i < n+1 ; i ++ ) {
+				dpArr[i] = new int[i+1];
+			}
+		}else if ( dpArr.length < n+1  ) {
+			int[][] tempArr = new int[n+1][];
+			for ( int i = 0 ; i < n+1 ; i ++ ) {
+				tempArr[i] = new int[i+1];
+				if ( dpArr.length-1 > i ) {
+					System.arraycopy(dpArr[i], 0, tempArr[i], 0, dpArr[i].length);
+				}
+			}
+			dpArr = tempArr;
+		}
+		
+		
+		if ( r == 0 || r == n ) {
+			return 1;
+		}else {
+			if ( dpArr[n][r] == 0 ) {
+				dpArr[n][r] = binomial(n-1,r-1) + binomial(n-1,r);
+			}
+			return dpArr[n][r];
+		}
+	}
+	private static int[][] dpArr; // 동적 프로그래밍 
+	
+	
 }
